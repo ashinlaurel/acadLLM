@@ -1,4 +1,5 @@
 import Chatter from '../pages/Chatter'
+import Courses from '../pages/Courses'
 import { lazy } from 'react'
 
 // use lazy for better code splitting, a.k.a. load faster
@@ -62,6 +63,10 @@ const routes = [
   {
     path: '/chatter',
     component: Chatter,
+  },
+  {
+    path: '/courses',
+    component: Courses,
   },
 ]
 

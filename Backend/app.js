@@ -1,22 +1,42 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const { OpenAI } = require('openai'); // Adjusted import
+const { OpenAI } = require('openai');
+// const { default: mongoose } = require('mongoose');
+const mongoose = require('mongoose');
 
-dotenv.config(); // Load environment variables from .env
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Enable CORS for all requests
 app.use(cors());
-
-// Enable JSON body parsing
 app.use(express.json());
 
-// Initialize OpenAI client
+mongoose
+  .connect(process.env.DATABASE, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    // useCreateIndex: true,
+  })
+  .then(console.log("Acad LLM DB CONNECTED"))
+  .catch((err) => {
+    console.log(err);
+  });
+
+app.get("/api/test", (req, res) => {
+  res.status(200).send("Successfull! Backend Routes Working");
+});
+
+
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
+});
+
+app.use((req, res, next) => {
+  req.openai = openai;
+  next();
 });
 
 // Define a POST route to handle chat completions
@@ -34,6 +54,14 @@ app.post('/chat', async (req, res) => {
     res.status(500).send('Something went wrong with OpenAI API');
   }
 });
+
+// Import routes
+const lectureRoutes = require('./routes/lectureRoutes');
+
+// const { default: mongoose } = require('mongoose');
+
+// Use the lecture routes
+app.use('/api/lectures', lectureRoutes);
 
 // Start the server
 app.listen(port, () => {

@@ -80,7 +80,7 @@ To start the backend server, navigate to the backend directory and run:
 
 ```bash
 cd Backend/
-node ./server.js
+node ./app.js
 ```
 
 ### Frontend

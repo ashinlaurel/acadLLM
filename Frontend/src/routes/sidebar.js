@@ -12,6 +12,11 @@ const routes = [
     name: 'Chatter', // name that appear in Sidebar
   },
   {
+    path: '/app/courses', // the url
+    icon: 'HomeIcon', // the component being exported from icons/index.js
+    name: 'Courses', // name that appear in Sidebar
+  },
+  {
     path: '/app/dashboard', // the url
     icon: 'HomeIcon', // the component being exported from icons/index.js
     name: 'Dashboard', // name that appear in Sidebar
