@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const { OpenAI } = require('openai');
+const path = require('path');
+const fs = require('fs');
 // const { default: mongoose } = require('mongoose');
 const mongoose = require('mongoose');
 
@@ -12,6 +14,12 @@ const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+
+const uploadsDir = path.join(__dirname, process.env.UPLOAD_FOLDER);
+
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
 
 mongoose
   .connect(process.env.DATABASE, {
