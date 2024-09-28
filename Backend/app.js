@@ -13,6 +13,12 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+const uploadsDir = path.join(__dirname, process.env.UPLOAD_FOLDER);
+
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
 mongoose
   .connect(process.env.DATABASE, {
     useNewUrlParser: true,
