@@ -1,6 +1,35 @@
-const LecturePDF = require('../models/LecturePDF');
+const Course = require('../models/Course');
+const Lecture = require('../models/Lecture');
 
-// Upload a new PDF and save its metadata
+exports.createLecture = async (req, res) => {
+  const { id, courseId, title, description } = req.body;
+
+  try {
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({ success: false, message: 'Course not found' });
+    }
+
+    const newLecture = new Lecture({
+      id,
+      title,
+      description,
+      courseId
+    });
+
+    const savedLecture = await newLecture.save();
+
+    course.lectures.push(savedLecture._id);
+    await course.save();
+
+    res.status(201).json({ success: true, data: savedLecture });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Failed to create lecture' });
+  }
+};
+
+
 exports.uploadPDF = async (req, res) => {
   try {
     const { lectureId, pdfUrl, vectorIndex, metadata } = req.body;
@@ -20,7 +49,6 @@ exports.uploadPDF = async (req, res) => {
   }
 };
 
-// Search for PDFs based on vector index
 exports.searchPDFs = async (req, res) => {
   try {
     const { vectorIndices } = req.body;

@@ -57,10 +57,12 @@ app.post('/chat', async (req, res) => {
 
 // Import routes
 const lectureRoutes = require('./routes/lectureRoutes');
+const courseRoutes = require('./routes/courseRoutes')
 
 // const { default: mongoose } = require('mongoose');
 
 // Use the lecture routes
+app.use('/api/courses', courseRoutes);
 app.use('/api/lectures', lectureRoutes);
 
 // Start the server

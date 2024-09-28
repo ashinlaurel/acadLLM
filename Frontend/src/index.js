@@ -4,7 +4,7 @@ import * as serviceWorker from './serviceWorker'
 
 import React, { Suspense } from 'react'
 
-import App from './App'
+import App from './app'
 import ReactDOM from 'react-dom'
 import { SidebarProvider } from './context/SidebarContext'
 import ThemedSuspense from './components/ThemedSuspense'
