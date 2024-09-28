@@ -1,4 +1,5 @@
 import Chatter from '../pages/Chatter'
+import CourseDetails from '../pages/CourseDetails'
 import Courses from '../pages/Courses'
 import { lazy } from 'react'
 
@@ -67,6 +68,10 @@ const routes = [
   {
     path: '/courses',
     component: Courses,
+  },
+  {
+    path: '/course/:courseid',
+    component: CourseDetails,
   },
 ]
 

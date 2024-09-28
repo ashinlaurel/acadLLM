@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 
 import { API } from "../backendapi";
 import InfoCard from "../components/Cards/InfoCard";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import PageTitle from "../components/Typography/PageTitle";
 import RoundIcon from "../components/RoundIcon";
 import SectionTitle from "../components/Typography/SectionTitle";
@@ -166,6 +167,7 @@ function Courses() {
 
       <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
         {(values || []).map((course, index) => (
+          <Link Link to={`/app/course/${course._id}`}>
           <InfoCard key={index} title={course.courseId} value={course.courseName}>
             <RoundIcon
               icon={PeopleIcon}
@@ -174,6 +176,7 @@ function Courses() {
               className="mr-4"
             />
           </InfoCard>
+          </Link>
         ))}
       </div>
     </>

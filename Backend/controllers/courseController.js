@@ -32,3 +32,22 @@ exports.getAll = async (req, res) => {
     res.status(500).json({ success: false, message: 'Failed to fetch courses' });
   }
 };
+
+
+exports.getCourseById = async (req, res) => {
+  const { id } = req.body;
+
+  try {
+    const course = await Course.findOne({ _id:id });
+
+    if (!course) {
+      return res.status(404).json({ success: false, message: 'Course not found' });
+    }
+
+    res.status(200).json({ success: true, data: course });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Failed to fetch course' });
+  }
+};
+
