@@ -76,7 +76,7 @@ function Courses() {
         data: formData,
       });
       if (response.data.success) {
-        alert("Lecture created successfully!");
+        alert("Course created successfully!");
         closeModal();
         setIsRefresh(!refresh); // Trigger refresh to re-fetch courses
       }
@@ -105,10 +105,10 @@ function Courses() {
               </Label>
 
               <Label className="mt-4">
-                <span>Lecture Title</span>
+                <span>Course Title</span>
                 <Input
                   className="mt-1"
-                  placeholder="Enter Lecture Title"
+                  placeholder="Enter Course Title"
                   name="courseName"
                   value={formData.courseName}
                   onChange={handleChange}
@@ -119,7 +119,7 @@ function Courses() {
                 <span>Description</span>
                 <Input
                   className="mt-1"
-                  placeholder="Enter Lecture Description"
+                  placeholder="Enter Course Description"
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
@@ -134,7 +134,7 @@ function Courses() {
               </Button>
             </div>
             <div className="hidden sm:block">
-              <Button onClick={handleSubmit}>Create Lecture</Button>
+              <Button onClick={handleSubmit}>Create Course</Button>
             </div>
             <div className="block w-full sm:hidden">
               <Button block size="large" layout="outline" onClick={closeModal}>
@@ -143,7 +143,7 @@ function Courses() {
             </div>
             <div className="block w-full sm:hidden">
               <Button block size="large" onClick={handleSubmit}>
-                Create Lecture
+                Create Course
               </Button>
             </div>
           </ModalFooter>
