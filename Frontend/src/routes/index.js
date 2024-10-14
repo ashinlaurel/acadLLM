@@ -13,6 +13,7 @@ const Modals = lazy(() => import('../pages/Modals'))
 const Tables = lazy(() => import('../pages/Tables'))
 const Page404 = lazy(() => import('../pages/404'))
 const Blank = lazy(() => import('../pages/Blank'))
+const Lectures = lazy(() => import('../pages/Lectures'))
 
 /**
  * ⚠ These are internal routes!
@@ -73,6 +74,10 @@ const routes = [
     path: '/course/:courseid',
     component: CourseDetails,
   },
+  {
+    path: '/course/:courseid/lectures',
+    component: Lectures
+  }
 ]
 
 export default routes
