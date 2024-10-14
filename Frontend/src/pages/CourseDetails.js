@@ -1,4 +1,14 @@
-import { Card, CardBody } from "@windmill/react-ui";
+import {
+  Card,
+  CardBody,
+  Button,
+  Input,
+  Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+} from "@windmill/react-ui";
 import { CartIcon, ChatIcon, MoneyIcon, PeopleIcon } from "../icons";
 import React, { useEffect, useState } from "react";
 
@@ -10,10 +20,28 @@ import RoundIcon from "../components/RoundIcon";
 import SectionTitle from "../components/Typography/SectionTitle";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 function CourseDetails() {
+  console.log("Rendering CourseDetails");
   const { courseid } = useParams();
   const [values, setValues] = useState(null);
+  const [refresh, setIsRefresh] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    id: "",
+    title: "",
+    courseId: courseid,
+    description: "",
+  });
+  const [lectures, setLectures] = useState([]);
+
+  // useEffect(() => {}, [refresh]);
+
+  useEffect(() => {
+    // getCourseInfo();
+    getLecturesForCourse();
+  }, [refresh]);
 
   const getCourseInfo = async () => {
     let data = { id: courseid };
@@ -31,25 +59,130 @@ function CourseDetails() {
     }
   };
 
-  useEffect(() => {
-    getCourseInfo();
-  }, []);
+  const getLecturesForCourse = async () => {
+    let data = { courseId: courseid };
+    try {
+      let res = await axios({
+        url: `${API}/lectures/getLectures`,
+        method: "POST",
+        data: data,
+      });
+      setValues(res.data.data);
+      console.log(res.data.data.lectures);
+      setLectures(res.data.data.lectures);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  // Handle input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const response = await axios({
+        url: `${API}/lectures/create`,
+        method: "POST",
+        data: formData,
+      });
+      if (response.data.success) {
+        alert("Lecture created successfully!");
+        closeModal();
+        setIsRefresh(!refresh); // Trigger refresh to re-fetch courses
+      }
+    } catch (error) {
+      console.error("Error creating lecture:", error);
+      alert("Failed to create lecture.");
+    }
+  };
 
   if (!values) {
     return <p>Loading course details...</p>;
   }
 
+  const AddLectureModal = () => {
+    return (
+      <>
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <ModalHeader>Add Lecture</ModalHeader>
+          <ModalBody>
+            <div className="px-4 py-3 mb-8 bg-white dark:bg-gray-800">
+              <Label className="mt-4">
+                <span>Lecture ID</span>
+                <Input
+                  className="mt-1"
+                  placeholder="Enter Lecture ID"
+                  name="id"
+                  value={formData.id}
+                  onChange={handleChange}
+                />
+              </Label>
+
+              <Label className="mt-4">
+                <span>Title</span>
+                <Input
+                  className="mt-1"
+                  placeholder="Enter Lecture Title"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                />
+              </Label>
+
+              <Label className="mt-4">
+                <span>Description</span>
+                <Input
+                  className="mt-1"
+                  placeholder="Enter Lecture Description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                />
+              </Label>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <div className="hidden sm:block">
+              <Button layout="outline" onClick={closeModal}>
+                Cancel
+              </Button>
+            </div>
+            <div className="hidden sm:block">
+              <Button onClick={handleSubmit}>Create Lecture</Button>
+            </div>
+            <div className="block w-full sm:hidden">
+              <Button block size="large" layout="outline" onClick={closeModal}>
+                Cancel
+              </Button>
+            </div>
+            <div className="block w-full sm:hidden">
+              <Button block size="large" onClick={handleSubmit}>
+                Create Lecture
+              </Button>
+            </div>
+          </ModalFooter>
+        </Modal>
+      </>
+    );
+  };
+
   return (
     <>
-
-<SectionTitle>{values.courseId}</SectionTitle>
-
+      {AddLectureModal()}
+      <SectionTitle>{values.courseId}</SectionTitle>
       <SectionTitle>{values.courseName}</SectionTitle>
       <Card className="mb-8 shadow-md">
         <CardBody>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            {values.description}
-          </p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">{values.description}</p>
         </CardBody>
       </Card>
 
@@ -91,37 +224,23 @@ function CourseDetails() {
         </InfoCard>
       </div>
 
+      <div className="my-4">
+        <Button onClick={openModal} layout="outline" size="large">
+          Add Lectures
+        </Button>
+      </div>
+
       <SectionTitle>Lectures</SectionTitle>
 
       <div className="grid gap-6 mb-8 md:grid-cols-2">
-        <Card>
-          <CardBody>
-            <p className="mb-4 font-semibold text-gray-600 dark:text-gray-300">
-              Lecture 1 : Introduction
-            </p>
-            <p className="text-gray-600 dark:text-gray-400">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga,
-              cum commodi a omnis numquam quod? Totam exercitationem quos hic
-              ipsam at qui cum numquam, sed amet ratione! Ratione, nihil
-              dolorum.
-            </p>
-          </CardBody>
-        </Card>
-
-        <Card>
-          <CardBody>
-            <p className="mb-4 font-semibold text-gray-600 dark:text-gray-300">
-              Lecture 2 : Open Ai
-            </p>
-            <p className="text-gray-600 dark:text-gray-400">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fuga,
-              cum commodi a omnis numquam quod? Totam exercitationem quos hic
-              ipsam at qui cum numquam, sed amet ratione! Ratione, nihil
-              dolorum.
-            </p>
-          </CardBody>
-        </Card>
-
+        {lectures.map((lecture, index) => (
+          <Card key={index}>
+            <CardBody>
+              <p className="mb-4 font-semibold text-gray-600 dark:text-gray-300">{lecture.title}</p>
+              <p className="text-gray-600 dark:text-gray-400">{lecture.description}</p>
+            </CardBody>
+          </Card>
+        ))}
       </div>
 
       {/* You can add more details here based on the course data */}
