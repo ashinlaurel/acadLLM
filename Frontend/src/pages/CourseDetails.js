@@ -19,8 +19,7 @@ import PageTitle from "../components/Typography/PageTitle";
 import RoundIcon from "../components/RoundIcon";
 import SectionTitle from "../components/Typography/SectionTitle";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { useParams, Link } from "react-router-dom";
 
 function CourseDetails() {
   console.log("Rendering CourseDetails");
@@ -234,12 +233,22 @@ function CourseDetails() {
 
       <div className="grid gap-6 mb-8 md:grid-cols-2">
         {lectures.map((lecture, index) => (
-          <Card key={index}>
-            <CardBody>
-              <p className="mb-4 font-semibold text-gray-600 dark:text-gray-300">{lecture.title}</p>
-              <p className="text-gray-600 dark:text-gray-400">{lecture.description}</p>
-            </CardBody>
-          </Card>
+          <Link 
+            key={index} 
+            to={{
+              pathname: `/app/course/${courseid}/lecture/${lecture._id}`,
+              state: { lecture }
+            }}
+          >
+            <Card>
+              <CardBody>
+                <p className="mb-4 font-semibold text-gray-600 dark:text-gray-300">
+                  {lecture.title}
+                </p>
+                <p className="text-gray-600 dark:text-gray-400">{lecture.description}</p>
+              </CardBody>
+            </Card>
+          </Link>
         ))}
       </div>
 

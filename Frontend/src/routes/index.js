@@ -75,7 +75,7 @@ const routes = [
     component: CourseDetails,
   },
   {
-    path: '/course/:courseid/lectures',
+    path: '/course/:courseid/lecture/:lectureid',
     component: Lectures
   }
 ]
