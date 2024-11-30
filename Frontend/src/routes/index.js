@@ -14,6 +14,8 @@ const Tables = lazy(() => import('../pages/Tables'))
 const Page404 = lazy(() => import('../pages/404'))
 const Blank = lazy(() => import('../pages/Blank'))
 const Lectures = lazy(() => import('../pages/Lectures'))
+const Users = lazy(() => import('../pages/Users'))
+const Profile = lazy(() => import('../pages/Profile'))
 
 /**
  * ⚠ These are internal routes!
@@ -65,6 +67,14 @@ const routes = [
   {
     path: '/chatter',
     component: Chatter,
+  },
+  {
+    path: '/users',
+    component: Users,
+  },
+  {
+    path: '/profile',
+    component: Profile,
   },
   {
     path: '/courses',

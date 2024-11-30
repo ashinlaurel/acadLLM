@@ -7,6 +7,7 @@ import React, { Suspense } from 'react'
 import App from './app'
 import ReactDOM from 'react-dom'
 import { SidebarProvider } from './context/SidebarContext'
+import { UserProvider } from './context/UserContext'
 import ThemedSuspense from './components/ThemedSuspense'
 import { Windmill } from '@windmill/react-ui'
 
@@ -22,7 +23,9 @@ ReactDOM.render(
   <SidebarProvider>
     <Suspense fallback={<ThemedSuspense />}>
       <Windmill usePreferences>
-        <App />
+        <UserProvider>
+          <App />
+        </UserProvider>
       </Windmill>
     </Suspense>
   </SidebarProvider>,

@@ -52,6 +52,11 @@ const routes = [
     name: 'Tables',
   },
   {
+    path: '/app/users',
+    icon: 'PeopleIcon',
+    name: 'Users',
+  },
+  {
     icon: 'PagesIcon',
     name: 'Pages',
     routes: [

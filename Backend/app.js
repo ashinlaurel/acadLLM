@@ -12,6 +12,7 @@ const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use('/api/uploads', express.static('uploads'));
 
 mongoose.set('strictQuery', true);
@@ -60,13 +61,15 @@ app.post('/chat', async (req, res) => {
 // Import routes
 const lectureRoutes = require('./routes/lectureRoutes');
 const courseRoutes = require('./routes/courseRoutes')
-
+const authRoutes = require('./routes/authRoutes')
+const userRoutes = require('./routes/userRoutes')
 // const { default: mongoose } = require('mongoose');
 
 // Use the lecture routes
 app.use('/api/courses', courseRoutes);
 app.use('/api/lectures', lectureRoutes);
-
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

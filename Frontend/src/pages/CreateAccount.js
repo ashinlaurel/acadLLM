@@ -1,12 +1,41 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-
+import { Link, useHistory } from 'react-router-dom'
+import { useState } from 'react';
 import ImageLight from '../assets/img/create-account-office.jpeg'
 import ImageDark from '../assets/img/create-account-office-dark.jpeg'
 import { GithubIcon, TwitterIcon } from '../icons'
 import { Input, Label, Button } from '@windmill/react-ui'
+import axios from 'axios';
+import { useUser } from '../context/UserContext';
 
 function Login() {
+  const history = useHistory();
+  const { login } = useUser();
+
+  const handleCreateAccount = async (email, password, confirmPassword) => {
+    try {
+      if (password !== confirmPassword) {
+        alert('Passwords do not match');
+        return;
+      }
+      const response = await axios.post('http://localhost:5000/api/auth/register', { email, password, firstName, lastName, phone });
+      localStorage.setItem('user', JSON.stringify(response.data.accessToken));
+      login(response.data);
+      history.push('/app');
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+      alert('Error creating account');
+    }
+  }
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phone, setPhone] = useState('');
+
   return (
     <div className="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900">
       <div className="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800">
@@ -32,15 +61,30 @@ function Login() {
               </h1>
               <Label>
                 <span>Email</span>
-                <Input className="mt-1" type="email" placeholder="john@doe.com" />
+                <Input className="mt-1" type="email" placeholder="john@doe.com" value={email} onChange={(e) => setEmail(e.target.value)} />
               </Label>
               <Label className="mt-4">
                 <span>Password</span>
-                <Input className="mt-1" placeholder="***************" type="password" />
+                <Input className="mt-1" placeholder="***************" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
               </Label>
               <Label className="mt-4">
                 <span>Confirm password</span>
-                <Input className="mt-1" placeholder="***************" type="password" />
+                <Input className="mt-1" placeholder="***************" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+              </Label>
+
+              <Label className="mt-4">
+                <span>First Name</span>
+                <Input className="mt-1" type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+              </Label>
+
+              <Label className="mt-4">
+                <span>Last Name</span>
+                <Input className="mt-1" type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+              </Label>
+
+              <Label className="mt-4">
+                <span>Phone</span>
+                <Input className="mt-1" type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
               </Label>
 
               <Label className="mt-6" check>
@@ -50,7 +94,7 @@ function Login() {
                 </span>
               </Label>
 
-              <Button tag={Link} to="/login" block className="mt-4">
+              <Button tag={Link} to="/login" block className="mt-4" onClick={() => handleCreateAccount(email, password, confirmPassword)}>
                 Create account
               </Button>
 
